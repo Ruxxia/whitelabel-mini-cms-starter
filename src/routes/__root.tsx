@@ -10,6 +10,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { Toaster } from "sonner";
+import { ConfirmProvider } from "@/components/ConfirmDialog";
 
 function NotFoundComponent() {
   return (
@@ -110,8 +111,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
-      <Toaster richColors position="top-right" />
+      <ConfirmProvider>
+        <Outlet />
+        <Toaster richColors position="top-right" />
+      </ConfirmProvider>
     </QueryClientProvider>
   );
 }

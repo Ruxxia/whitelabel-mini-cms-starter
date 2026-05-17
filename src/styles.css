@@ -1,4 +1,5 @@
 @import "tailwindcss" source(none);
+@plugin "@tailwindcss/typography";
 @source "../src";
 @import "tw-animate-css";
 
@@ -145,4 +146,71 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+}
+
+/* Premium Rich Text & TipTap Typography Overrides */
+.prose, .tiptap {
+  line-height: 1.625;
+}
+
+.prose ul, .tiptap ul {
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.prose ol, .tiptap ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5rem !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.prose li, .tiptap li {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+  display: list-item !important;
+}
+
+.prose blockquote, .tiptap blockquote {
+  border-left: 4px solid var(--primary) !important;
+  padding-left: 1rem !important;
+  font-style: italic !important;
+  color: var(--muted-foreground) !important;
+  margin: 1.25rem 0 !important;
+  background-color: color-mix(in oklab, var(--primary) 5%, transparent);
+  border-radius: 0.25rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.prose h2, .tiptap h2 {
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.75rem !important;
+  line-height: 1.3 !important;
+  color: var(--foreground) !important;
+}
+
+.prose h3, .tiptap h3 {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.4 !important;
+  color: var(--foreground) !important;
+}
+
+.prose hr, .tiptap hr {
+  margin: 2rem 0 !important;
+  border: 0;
+  border-top: 1px solid var(--border) !important;
+}
+
+/* Bullet list and decimal list alignment inside Tiptap editor input */
+.tiptap ul, .tiptap ol {
+  list-style-position: outside !important;
 }

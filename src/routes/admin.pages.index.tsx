@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { useConfirm } from "@/components/ConfirmDialog";
 
 export const Route = createFileRoute("/admin/pages/")({ component: AdminPages });
 
@@ -29,6 +30,7 @@ function AdminPages() {
   const { data: footerMenus } = useMenus("footer");
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const confirm = useConfirm();
   const [newLabel, setNewLabel] = useState("");
   const [newUrl, setNewUrl] = useState("");
 
@@ -66,10 +68,18 @@ function AdminPages() {
   const removePage = async (e: React.MouseEvent, id: string, slug: string, label: string) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!id) return toast.error("Halaman bawaan tidak dapat dihapus");
-    if (!confirm(`Hapus halaman "${label}"? Section pada halaman ini juga akan dihapus.`)) return;
-    const { error: mErr } = await supabase.from("menus").delete().eq("id", id);
-    if (mErr) return toast.error(mErr.message);
+    if (slug === "home") return toast.error("Halaman Beranda tidak dapat dihapus");
+    const ok = await confirm({
+      title: `Hapus halaman "${label}"?`,
+      description: "Entri menu dan seluruh section pada halaman ini akan dihapus.",
+      destructive: true,
+      confirmText: "Hapus",
+    });
+    if (!ok) return;
+    if (id) {
+      const { error: mErr } = await supabase.from("menus").delete().eq("id", id);
+      if (mErr) return toast.error(mErr.message);
+    }
     await supabase.from("sections").delete().eq("page_slug", slug);
     toast.success("Halaman dihapus");
     qc.invalidateQueries({ queryKey: ["menus", "header"] });
@@ -102,7 +112,7 @@ function AdminPages() {
         {menuPages.map((p) => {
           const b = BUILTIN[p.slug];
           const Icon = b?.icon ?? FileText;
-          const canDelete = !!p.id && !b;
+          const canDelete = p.slug !== "home";
           return (
             <div key={p.slug} className="relative">
               <Link

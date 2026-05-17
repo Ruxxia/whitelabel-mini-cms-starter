@@ -6,11 +6,13 @@ import { ImageUpload } from "@/components/ImageUpload";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
+import { useConfirm } from "@/components/ConfirmDialog";
 
 export const Route = createFileRoute("/admin/gallery")({ component: AdminGallery });
 
 function AdminGallery() {
   const qc = useQueryClient();
+  const confirm = useConfirm();
   const [title, setTitle] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const { data } = useQuery({
@@ -31,7 +33,7 @@ function AdminGallery() {
     toast.success("Ditambahkan");
   };
   const remove = async (id: string) => {
-    if (!confirm("Hapus?")) return;
+    if (!(await confirm({ title: "Hapus gambar?", destructive: true, confirmText: "Hapus" }))) return;
     await supabase.from("gallery_images").delete().eq("id", id);
     qc.invalidateQueries({ queryKey: ["admin_gallery"] });
     qc.invalidateQueries({ queryKey: ["gallery"] });

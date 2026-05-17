@@ -19,6 +19,8 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductsIndexRouteImport } from './routes/products.index'
+import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as ProductsSlugRouteImport } from './routes/products.$slug'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
@@ -82,6 +84,16 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ProductsIndexRoute = ProductsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProductsRoute,
+} as any)
+const BlogIndexRoute = BlogIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BlogRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
@@ -171,6 +183,8 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/products/': typeof ProductsIndexRoute
   '/admin/pages/$slug': typeof AdminPagesSlugRoute
   '/admin/pages/': typeof AdminPagesIndexRoute
 }
@@ -178,11 +192,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
   '/about': typeof AboutRoute
-  '/blog': typeof BlogRouteWithChildren
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
   '/login': typeof LoginRoute
-  '/products': typeof ProductsRouteWithChildren
   '/services': typeof ServicesRoute
   '/admin/blog': typeof AdminBlogRoute
   '/admin/gallery': typeof AdminGalleryRoute
@@ -194,6 +206,8 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin': typeof AdminIndexRoute
+  '/blog': typeof BlogIndexRoute
+  '/products': typeof ProductsIndexRoute
   '/admin/pages/$slug': typeof AdminPagesSlugRoute
   '/admin/pages': typeof AdminPagesIndexRoute
 }
@@ -220,6 +234,8 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
   '/admin/': typeof AdminIndexRoute
+  '/blog/': typeof BlogIndexRoute
+  '/products/': typeof ProductsIndexRoute
   '/admin/pages/$slug': typeof AdminPagesSlugRoute
   '/admin/pages/': typeof AdminPagesIndexRoute
 }
@@ -247,6 +263,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/products/$slug'
     | '/admin/'
+    | '/blog/'
+    | '/products/'
     | '/admin/pages/$slug'
     | '/admin/pages/'
   fileRoutesByTo: FileRoutesByTo
@@ -254,11 +272,9 @@ export interface FileRouteTypes {
     | '/'
     | '/$slug'
     | '/about'
-    | '/blog'
     | '/contact'
     | '/gallery'
     | '/login'
-    | '/products'
     | '/services'
     | '/admin/blog'
     | '/admin/gallery'
@@ -270,6 +286,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/products/$slug'
     | '/admin'
+    | '/blog'
+    | '/products'
     | '/admin/pages/$slug'
     | '/admin/pages'
   id:
@@ -295,6 +313,8 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/products/$slug'
     | '/admin/'
+    | '/blog/'
+    | '/products/'
     | '/admin/pages/$slug'
     | '/admin/pages/'
   fileRoutesById: FileRoutesById
@@ -385,6 +405,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/products/': {
+      id: '/products/'
+      path: '/'
+      fullPath: '/products/'
+      preLoaderRoute: typeof ProductsIndexRouteImport
+      parentRoute: typeof ProductsRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexRouteImport
+      parentRoute: typeof BlogRoute
     }
     '/admin/': {
       id: '/admin/'
@@ -518,20 +552,24 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface BlogRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
+  BlogIndexRoute: typeof BlogIndexRoute
 }
 
 const BlogRouteChildren: BlogRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
+  BlogIndexRoute: BlogIndexRoute,
 }
 
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface ProductsRouteChildren {
   ProductsSlugRoute: typeof ProductsSlugRoute
+  ProductsIndexRoute: typeof ProductsIndexRoute
 }
 
 const ProductsRouteChildren: ProductsRouteChildren = {
   ProductsSlugRoute: ProductsSlugRoute,
+  ProductsIndexRoute: ProductsIndexRoute,
 }
 
 const ProductsRouteWithChildren = ProductsRoute._addFileChildren(

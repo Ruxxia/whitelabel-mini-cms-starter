@@ -1,11 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { AdminLayout } from "@/components/AdminLayout";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState } from "react";
-import { ImageUpload } from "@/components/ImageUpload";
+import { MultiImageUpload } from "@/components/MultiImageUpload";
+import { RichTextEditor } from "@/components/RichTextEditor";
 import { toast } from "sonner";
-import { Plus, Trash2, Pencil, X } from "lucide-react";
+import { Plus, Trash2, Pencil, X, LayoutTemplate } from "lucide-react";
+import { useConfirm } from "@/components/ConfirmDialog";
 
 export const Route = createFileRoute("/admin/products")({ component: AdminProducts });
 
@@ -16,13 +18,15 @@ type ProductForm = {
   description: string;
   price: string;
   image_url: string;
+  gallery: string[];
   is_published: boolean;
 };
 
-const empty: ProductForm = { name: "", slug: "", description: "", price: "", image_url: "", is_published: true };
+const empty: ProductForm = { name: "", slug: "", description: "", price: "", image_url: "", gallery: [], is_published: true };
 
 function AdminProducts() {
   const qc = useQueryClient();
+  const confirm = useConfirm();
   const [editing, setEditing] = useState<ProductForm | null>(null);
 
   const { data } = useQuery({
@@ -42,6 +46,7 @@ function AdminProducts() {
       description: editing.description,
       price: editing.price ? Number(editing.price) : null,
       image_url: editing.image_url || null,
+      gallery: editing.gallery || [],
       is_published: editing.is_published,
     };
     const res = editing.id
@@ -55,7 +60,7 @@ function AdminProducts() {
   };
 
   const remove = async (id: string) => {
-    if (!confirm("Hapus produk?")) return;
+    if (!(await confirm({ title: "Hapus produk?", description: "Tindakan ini tidak dapat dibatalkan.", destructive: true, confirmText: "Hapus" }))) return;
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) return toast.error(error.message);
     toast.success("Dihapus");
@@ -67,10 +72,16 @@ function AdminProducts() {
     <AdminLayout>
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Produk</h1>
-        <button onClick={() => setEditing({ ...empty })} className="inline-flex items-center gap-1 rounded-md bg-primary text-primary-foreground px-3 py-2 text-sm">
-          <Plus className="h-4 w-4" /> Tambah
-        </button>
+        <div className="flex items-center gap-2">
+          <Link to="/admin/pages/$slug" params={{ slug: "product_detail" }} className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-2 text-sm hover:bg-muted">
+            <LayoutTemplate className="h-4 w-4" /> Atur Halaman Detail
+          </Link>
+          <button onClick={() => setEditing({ ...empty })} className="inline-flex items-center gap-1 rounded-md bg-primary text-primary-foreground px-3 py-2 text-sm">
+            <Plus className="h-4 w-4" /> Tambah
+          </button>
+        </div>
       </div>
+      <p className="text-sm text-muted-foreground mt-1">Halaman detail produk diakses otomatis di <code>/products/&lt;slug&gt;</code>. Gunakan "Atur Halaman Detail" untuk menyusun blok yang menampilkan data produk secara dinamis.</p>
 
       <div className="mt-6 rounded-2xl border border-border bg-card overflow-hidden">
         <table className="w-full text-sm">
@@ -89,7 +100,7 @@ function AdminProducts() {
                 <td className="p-3">{p.price ? `Rp ${Number(p.price).toLocaleString("id-ID")}` : "-"}</td>
                 <td className="p-3">{p.is_published ? "Publik" : "Draft"}</td>
                 <td className="p-3 text-right space-x-1">
-                  <button onClick={() => setEditing({ id: p.id, name: p.name, slug: p.slug, description: p.description ?? "", price: p.price?.toString() ?? "", image_url: p.image_url ?? "", is_published: p.is_published })} className="p-2 hover:bg-muted rounded-md"><Pencil className="h-4 w-4" /></button>
+                  <button onClick={() => setEditing({ id: p.id, name: p.name, slug: p.slug, description: p.description ?? "", price: p.price?.toString() ?? "", image_url: p.image_url ?? "", gallery: Array.isArray(p.gallery) ? (p.gallery as string[]) : [], is_published: p.is_published })} className="p-2 hover:bg-muted rounded-md"><Pencil className="h-4 w-4" /></button>
                   <button onClick={() => remove(p.id)} className="p-2 hover:bg-muted rounded-md text-destructive"><Trash2 className="h-4 w-4" /></button>
                 </td>
               </tr>
@@ -107,9 +118,24 @@ function AdminProducts() {
             </div>
             <Field label="Nama"><input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="input" /></Field>
             <Field label="Slug"><input value={editing.slug} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} placeholder="otomatis dari nama" className="input" /></Field>
-            <Field label="Deskripsi"><textarea value={editing.description} onChange={(e) => setEditing({ ...editing, description: e.target.value })} rows={3} className="input" /></Field>
+            <Field label="Deskripsi">
+              <RichTextEditor
+                value={editing.description}
+                onChange={(html) => setEditing({ ...editing, description: html })}
+              />
+            </Field>
             <Field label="Harga (IDR)"><input type="number" value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} className="input" /></Field>
-            <Field label="Gambar"><ImageUpload bucket="products" value={editing.image_url} onChange={(url) => setEditing({ ...editing, image_url: url })} /></Field>
+            <Field label="Gambar Produk (Maks 5)">
+              <MultiImageUpload
+                bucket="products"
+                values={[editing.image_url, ...(editing.gallery || [])].filter(Boolean)}
+                onChange={(urls) => {
+                  const image_url = urls[0] || "";
+                  const gallery = urls.slice(1);
+                  setEditing({ ...editing, image_url, gallery });
+                }}
+              />
+            </Field>
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" checked={editing.is_published} onChange={(e) => setEditing({ ...editing, is_published: e.target.checked })} />
               Publikasikan
