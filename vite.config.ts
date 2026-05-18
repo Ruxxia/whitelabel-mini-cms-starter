@@ -6,8 +6,9 @@ import tsConfigPaths from "vite-tsconfig-paths";
 import { cloudflare } from "@cloudflare/vite-plugin";
 import path from "node:path";
 
-// Set DEPLOY_TARGET=vercel (or anything non-cloudflare) to skip the Cloudflare plugin.
-const useCloudflare = (process.env.DEPLOY_TARGET ?? "cloudflare") === "cloudflare";
+// Skip Cloudflare plugin if deploying to Vercel (detected via DEPLOY_TARGET or standard VERCEL env var).
+const useCloudflare =
+  (process.env.DEPLOY_TARGET ?? "cloudflare") === "cloudflare" && !process.env.VERCEL;
 
 export default defineConfig(({ command }) => ({
   server: {
@@ -23,7 +24,7 @@ export default defineConfig(({ command }) => ({
   plugins: [
     tailwindcss(),
     tsConfigPaths({ projects: ["./tsconfig.json"] }),
-    tanstackStart({ server: { entry: "server" } }),
+    tanstackStart(useCloudflare ? { server: { entry: "server" } } : undefined),
     viteReact(),
     ...(useCloudflare && command === "build"
       ? [cloudflare({ viteEnvironment: { name: "ssr" } })]
