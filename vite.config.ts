@@ -4,6 +4,7 @@ import viteReact from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 import { cloudflare } from "@cloudflare/vite-plugin";
+import { nitro } from "nitro/vite";
 import path from "node:path";
 
 // Skip Cloudflare plugin if deploying to Vercel (detected via DEPLOY_TARGET or standard VERCEL env var).
@@ -28,6 +29,9 @@ export default defineConfig(({ command }) => ({
     viteReact(),
     ...(useCloudflare && command === "build"
       ? [cloudflare({ viteEnvironment: { name: "ssr" } })]
+      : []),
+    ...(!useCloudflare && command === "build"
+      ? [nitro()]
       : []),
   ],
 }));
