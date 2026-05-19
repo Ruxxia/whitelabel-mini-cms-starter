@@ -10,7 +10,7 @@ function Index() {
   const { data: settings } = useSettings();
   const { data: sections } = useSections("home");
   usePageSEO("home", {
-    title: settings ? `${settings.site_name}${settings.tagline ? " — " + settings.tagline : ""}` : "Beranda",
+    title: settings ? `${settings.site_name}${settings.tagline ? " — " + settings.tagline : ""}` : "Home",
     description: settings?.description ?? undefined,
   });
 
@@ -18,8 +18,8 @@ function Index() {
     <SiteLayout>
       {sections && sections.length === 0 && (
         <section className="container mx-auto px-4 py-24 text-center">
-          <h1 className="text-4xl font-bold">{settings?.site_name ?? "Selamat datang"}</h1>
-          <p className="mt-3 text-muted-foreground">Belum ada section. Tambahkan dari admin → Halaman.</p>
+          <h1 className="text-4xl font-bold">{settings?.site_name ?? "Welcome"}</h1>
+          <p className="mt-3 text-muted-foreground">No sections yet. Add them from Admin → Pages.</p>
         </section>
       )}
       <PageSections pageSlug="home" />

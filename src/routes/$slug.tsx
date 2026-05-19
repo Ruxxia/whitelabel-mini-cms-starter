@@ -14,7 +14,7 @@ function DynamicPage() {
   if (isLoading) {
     return (
       <SiteLayout>
-        <div className="container mx-auto px-4 py-24 text-center text-muted-foreground">Memuat...</div>
+        <div className="container mx-auto px-4 py-24 text-center text-muted-foreground">Loading...</div>
       </SiteLayout>
     );
   }
@@ -24,7 +24,7 @@ function DynamicPage() {
       <SiteLayout>
         <section className="container mx-auto px-4 py-24 text-center">
           <h1 className="text-4xl font-bold capitalize">{slug}</h1>
-          <p className="mt-3 text-muted-foreground">Halaman ini belum memiliki konten. Tambahkan section dari Admin → Halaman.</p>
+          <p className="mt-3 text-muted-foreground">This page does not have any content yet. Add sections from Admin → Pages.</p>
         </section>
       </SiteLayout>
     );

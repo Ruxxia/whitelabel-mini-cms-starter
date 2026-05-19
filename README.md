@@ -1,18 +1,18 @@
 # CMS Website
 
-Website CMS dinamis berbasis **TanStack Start**, **React 19**, **Tailwind CSS v4**, dan **Supabase** sebagai backend (Postgres + Auth + Storage). Bisa di-deploy ke **Cloudflare Workers**, **Vercel**, atau platform lain yang mendukung Node/Edge runtime.
+A dynamic CMS website powered by **TanStack Start**, **React 19**, **Tailwind CSS v4**, and **Supabase** as the backend (Postgres + Auth + Storage). It can be deployed to **Cloudflare Workers**, **Vercel**, or other platforms that support Node/Edge runtimes.
 
-## Fitur
+## Features
 
-- **Halaman dinamis** — kelola halaman dari menu admin (Beranda, Produk, Blog, Galeri, dan halaman custom dari menu).
-- **Menu reorderable** — atur urutan menu navigasi langsung dari panel admin.
-- **Section builder** — tambah/edit/hapus konten per halaman lewat sections.
-- **Produk, Blog, Galeri** — modul CRUD lengkap dengan upload gambar.
-- **SEO & Open Graph** — pengaturan global di Settings + override per halaman, dengan fallback otomatis.
-- **SEO Preview** — preview real-time tampilan Google, Facebook, dan Twitter/X.
-- **Sitemap & robots.txt dinamis** — `/api/sitemap.xml` dan `/api/robots.txt` otomatis dari database.
-- **Autentikasi admin** — login terproteksi untuk akses panel `/admin`. User pertama otomatis menjadi admin.
-- **File storage** — upload gambar via Supabase Storage.
+- **Dynamic pages** — manage pages from the admin panel (Home, Products, Blog, Gallery, and custom pages from the menu).
+- **Reorderable menu** — manage the order of the navigation menu directly from the admin panel.
+- **Section builder** — add/edit/delete content per page using sections.
+- **Products, Blog, Gallery** — complete CRUD modules with image upload support.
+- **SEO & Open Graph** — global settings + per-page override, with automatic fallbacks.
+- **SEO Preview** — real-time preview of how the site appears on Google, Facebook, and Twitter/X.
+- **Dynamic sitemap & robots.txt** — automatic `/api/sitemap.xml` and `/api/robots.txt` generated from the database.
+- **Admin authentication** — protected login to access the `/admin` panel. The first registered user automatically becomes the admin.
+- **File storage** — upload images via Supabase Storage.
 
 ## Tech Stack
 
@@ -26,65 +26,65 @@ Website CMS dinamis berbasis **TanStack Start**, **React 19**, **Tailwind CSS v4
 
 ## 1. Setup Supabase
 
-1. Buat project baru di [supabase.com](https://supabase.com).
-2. Di **Project Settings → API**, catat:
+1. Create a new project at [supabase.com](https://supabase.com).
+2. In **Project Settings → API**, note down:
    - `Project URL`
    - `anon` / `publishable` key
-   - `service_role` key (rahasia, hanya untuk server)
-3. Jalankan migrasi database:
+   - `service_role` key (secret, server-only)
+3. Run database migrations:
    - Install Supabase CLI: `npm i -g supabase`
-   - Login: `supabase login`
+   - Log in: `supabase login`
    - Link project: `supabase link --project-ref <project-ref>`
-   - Push migrasi: `supabase db push`
-4. Buat **Storage Buckets** (public): `media`, `products`, `gallery`, `blog`.
-5. (Opsional) Aktifkan provider auth tambahan (Google, dll) di **Authentication → Providers**.
+   - Push migrations: `supabase db push`
+4. Create public **Storage Buckets**: `media`, `products`, `gallery`, `blog`.
+5. (Optional) Enable additional auth providers (Google, etc.) in **Authentication → Providers**.
 
 ### Environment Variables
 
-Buat file `.env` di root project:
+Create a `.env` file in the project root:
 
 ```env
-# Client (terlihat di browser)
+# Client (visible in browser)
 VITE_SUPABASE_URL=https://<project-ref>.supabase.co
 VITE_SUPABASE_PUBLISHABLE_KEY=<anon-key>
 VITE_SUPABASE_PROJECT_ID=<project-ref>
 
-# Server (rahasia)
+# Server (secret)
 SUPABASE_URL=https://<project-ref>.supabase.co
 SUPABASE_PUBLISHABLE_KEY=<anon-key>
 SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
 ```
 
-> ⚠️ Jangan pernah commit `SUPABASE_SERVICE_ROLE_KEY` ke repo public.
+> ⚠️ Never commit `SUPABASE_SERVICE_ROLE_KEY` to a public repository.
 
 ---
 
-## 2. Menjalankan Lokal
+## 2. Running Locally
 
 ```bash
-bun install         # atau: npm install / pnpm install
+bun install         # or: npm install / pnpm install
 bun run dev
 ```
 
-Buka `http://localhost:5173`. Daftar user pertama di `/login` — akun tersebut otomatis jadi admin. Panel admin: `/admin`.
+Open `http://localhost:5173`. Register the first user at `/login` — this account automatically becomes the admin. Admin panel: `/admin`.
 
 ### Scripts
 
 - `bun run dev` — development server
 - `bun run build` — production build
-- `bun run preview` — preview hasil build
+- `bun run preview` — preview build output
 - `bun run lint` — eslint
 - `bun run format` — prettier
 
 ---
 
-## 3. Deploy ke Cloudflare Workers
+## 3. Deploying to Cloudflare Workers
 
-Project sudah ter-konfigurasi untuk Cloudflare Workers (`wrangler.jsonc` + `@cloudflare/vite-plugin`).
+The project is pre-configured for Cloudflare Workers (`wrangler.jsonc` + `@cloudflare/vite-plugin`).
 
 1. Install Wrangler: `npm i -g wrangler`
 2. Login: `wrangler login`
-3. Set secrets di Cloudflare:
+3. Set secrets on Cloudflare:
    ```bash
    wrangler secret put SUPABASE_URL
    wrangler secret put SUPABASE_PUBLISHABLE_KEY
@@ -95,52 +95,52 @@ Project sudah ter-konfigurasi untuk Cloudflare Workers (`wrangler.jsonc` + `@clo
    bun run build
    wrangler deploy
    ```
-5. Tambahkan `VITE_*` di `wrangler.jsonc` pada `vars` (publishable values OK di config) atau via build env.
+5. Add `VITE_*` variables to `wrangler.jsonc` under `vars` (publishable values are fine in config) or via the build environment.
 
-> Cloudflare Workers menggunakan `nodejs_compat` flag (sudah aktif di `wrangler.jsonc`). Hindari package Node-only.
+> Cloudflare Workers uses the `nodejs_compat` flag (already enabled in `wrangler.jsonc`). Avoid packages that are Node-only.
 
 ---
 
-## 4. Deploy ke Vercel
+## 4. Deploying to Vercel
 
-1. Push repo ke GitHub/GitLab/Bitbucket.
-2. Import project di [vercel.com/new](https://vercel.com/new).
-3. **Build Command**: `bun run build` (atau `npm run build`).
-4. **Output**: biarkan default — TanStack Start + Vite akan menghasilkan SSR build yang dideteksi otomatis oleh Vercel.
-5. Tambahkan **Environment Variables** di Project Settings → Environment Variables (sesuai daftar di section Setup Supabase di atas), untuk Production, Preview, dan Development.
+1. Push your repository to GitHub/GitLab/Bitbucket.
+2. Import the project on [vercel.com/new](https://vercel.com/new).
+3. **Build Command**: `bun run build` (or `npm run build`).
+4. **Output**: leave as default — TanStack Start + Vite will produce an SSR build that is automatically detected by Vercel.
+5. Add the **Environment Variables** in Project Settings → Environment Variables (as listed in the Setup Supabase section above) for Production, Preview, and Development.
 6. Deploy.
 
-> Untuk target Vercel (Node runtime), kamu mungkin perlu mengganti adapter Vite dari `@cloudflare/vite-plugin` ke konfigurasi Node default. Jika men-deploy ke Vercel, hapus/komentar plugin Cloudflare di `vite.config.ts` dan `wrangler.jsonc` tidak digunakan.
+> For Vercel target (Node runtime), you might need to change the Vite adapter from `@cloudflare/vite-plugin` to the default Node configuration. If deploying to Vercel, remove/comment out the Cloudflare plugin in `vite.config.ts` and `wrangler.jsonc` is not used.
 
 ---
 
-## Struktur Folder
+## Directory Structure
 
 ```
 src/
   routes/          # File-based routing (TanStack Start)
-    admin.*        # Panel admin
+    admin.*        # Admin panel
     api/           # Server routes (sitemap, robots)
-  components/      # Komponen UI & layout
+  components/      # UI components & layouts
   lib/             # Helpers (auth, seo, storage)
   integrations/    # Supabase client
-supabase/          # Konfigurasi & migrasi backend
+supabase/          # Backend configuration & migrations
 ```
 
-## Endpoint Publik
+## Public Endpoints
 
-- `/api/sitemap.xml` — sitemap otomatis dari halaman, produk, blog, dan menu custom.
-- `/api/robots.txt` — robots.txt yang dapat dikonfigurasi dari Settings.
+- `/api/sitemap.xml` — dynamic sitemap generated from pages, products, blog, and custom menus.
+- `/api/robots.txt` — configurable robots.txt based on Settings.
 
 ## SEO
 
-Setiap halaman mengikuti urutan prioritas metadata:
+Each page follows this metadata priority order:
 
-1. SEO per-halaman (admin → Halaman → Edit → SEO).
-2. Default route bawaan.
-3. Global OG (admin → Pengaturan → SEO & Open Graph).
-4. Site identity (nama situs / logo).
+1. Per-page SEO (admin → Pages → Edit → SEO).
+2. Built-in default route fallback.
+3. Global OG (admin → Settings → SEO & Open Graph).
+4. Site identity (site name / logo).
 
-## Lisensi
+## License
 
 MIT.

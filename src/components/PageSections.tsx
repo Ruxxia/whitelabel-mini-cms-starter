@@ -142,14 +142,14 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
         </section>
       );
     case "featured_products":
-      return <FeaturedProducts title={d.title ?? "Produk Unggulan"} limit={Number(d.limit ?? 3)} />;
+      return <FeaturedProducts title={d.title ?? "Featured Products"} limit={Number(d.limit ?? 3)} />;
     case "featured_blog":
-      return <FeaturedBlog title={d.title ?? "Artikel Terbaru"} limit={Number(d.limit ?? 3)} />;
+      return <FeaturedBlog title={d.title ?? "Latest Articles"} limit={Number(d.limit ?? 3)} />;
     case "featured_gallery":
-      return <FeaturedGallery title={d.title ?? "Galeri"} limit={Number(d.limit ?? 6)} />;
+      return <FeaturedGallery title={d.title ?? "Gallery"} limit={Number(d.limit ?? 6)} />;
     case "item_back_link": {
       const url = d.url ?? "/";
-      const label = d.label ?? "Kembali";
+      const label = d.label ?? "Back";
       return (
         <div className="container mx-auto px-4 pt-8">
           <a href={url} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
@@ -193,7 +193,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       return (
         <section className="container mx-auto px-4 pt-3 max-w-3xl">
           <p className="text-2xl font-bold text-primary">
-            {d.prefix ?? "Rp"} {Number(item.price).toLocaleString("id-ID")}
+            {d.prefix ?? "$"} {Number(item.price).toLocaleString("en-US")}
           </p>
         </section>
       );
@@ -204,7 +204,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       return (
         <section className="container mx-auto px-4 pt-2 max-w-3xl">
           <p className="text-sm text-muted-foreground">
-            {new Date(date).toLocaleDateString("id-ID", { dateStyle: "long" })}
+            {new Date(date).toLocaleDateString("en-US", { dateStyle: "long" })}
           </p>
         </section>
       );
@@ -241,7 +241,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       );
     }
     case "item_button": {
-      const label = d.label ?? "Klik di sini";
+      const label = d.label ?? "Click here";
       const rawUrl: string = d.url ?? "#";
       const url = rawUrl
         .replace(/\{slug\}/g, item?.slug ?? "")
@@ -275,8 +275,8 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       const desc = item?.description ?? item?.excerpt ?? item?.content ?? "";
       const price = item?.price;
       const backUrl = d.back_url ?? "/products";
-      const backLabel = d.back_label ?? "Kembali ke produk";
-      const ctaLabel = d.cta_label ?? "Pesan Sekarang";
+      const backLabel = d.back_label ?? "Back to products";
+      const ctaLabel = d.cta_label ?? "Order Now";
       const rawCta: string = d.cta_url ?? "/contact";
       const ctaUrl = rawCta
         .replace(/\{slug\}/g, item?.slug ?? "")
@@ -315,7 +315,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
               <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight">{title}</h1>
               {price != null && (
                 <div className="flex items-baseline gap-2">
-                  <span className="text-3xl font-bold text-primary">Rp {Number(price).toLocaleString("id-ID")}</span>
+                  <span className="text-3xl font-bold text-primary">${Number(price).toLocaleString("en-US")}</span>
                 </div>
               )}
               {desc && <div className="text-base text-muted-foreground leading-relaxed prose prose-slate dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: desc }} />}
@@ -345,7 +345,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       const desc = item?.description ?? item?.excerpt ?? "";
       const price = item?.price;
       const backUrl = d.back_url ?? "/products";
-      const backLabel = d.back_label ?? "Kembali";
+      const backLabel = d.back_label ?? "Back";
       const ctaUrl = (d.cta_url ?? "/contact")
         .replace(/\{slug\}/g, item?.slug ?? "")
         .replace(/\{name\}/g, encodeURIComponent(title))
@@ -369,7 +369,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
           <div className="max-w-3xl">
             {subtitle && <p className="text-sm uppercase tracking-wider text-muted-foreground mb-2">{subtitle}</p>}
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">{title}</h1>
-            {price != null && <p className="mt-4 text-3xl font-bold text-primary">Rp {Number(price).toLocaleString("id-ID")}</p>}
+            {price != null && <p className="mt-4 text-3xl font-bold text-primary">${Number(price).toLocaleString("en-US")}</p>}
             {desc && <div className="mt-6 text-base text-muted-foreground leading-relaxed prose prose-slate dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: desc }} />}
             {d.cta_label && (
               <a href={ctaUrl} target={d.cta_new_tab ? "_blank" : undefined} rel={d.cta_new_tab ? "noopener noreferrer" : undefined}
@@ -389,7 +389,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       const desc = item?.description ?? item?.excerpt ?? "";
       const price = item?.price;
       const backUrl = d.back_url ?? "/products";
-      const backLabel = d.back_label ?? "Kembali";
+      const backLabel = d.back_label ?? "Back";
       const ctaUrl = (d.cta_url ?? "/contact")
         .replace(/\{slug\}/g, item?.slug ?? "")
         .replace(/\{name\}/g, encodeURIComponent(title))
@@ -409,7 +409,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
               <div className="max-w-3xl">
                 {subtitle && <span className="inline-flex items-center rounded-full bg-white/10 backdrop-blur px-3 py-1 text-xs font-medium">{subtitle}</span>}
                 <h1 className="mt-4 text-4xl md:text-6xl font-bold tracking-tight leading-tight">{title}</h1>
-                {price != null && <p className="mt-4 text-3xl font-bold">Rp {Number(price).toLocaleString("id-ID")}</p>}
+                {price != null && <p className="mt-4 text-3xl font-bold">${Number(price).toLocaleString("en-US")}</p>}
               </div>
             </div>
           </section>
@@ -433,7 +433,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       const desc = item?.description ?? item?.excerpt ?? "";
       const price = item?.price;
       const backUrl = d.back_url ?? "/products";
-      const backLabel = d.back_label ?? "Kembali";
+      const backLabel = d.back_label ?? "Back";
       const ctaUrl = (d.cta_url ?? "/contact")
         .replace(/\{slug\}/g, item?.slug ?? "")
         .replace(/\{name\}/g, encodeURIComponent(title))
@@ -453,10 +453,10 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
             <div className="rounded-3xl border border-border bg-card p-6 flex flex-col justify-between">
               {subtitle && <span className="text-xs uppercase tracking-wider text-muted-foreground">{subtitle}</span>}
               <h1 className="mt-2 text-2xl md:text-3xl font-bold tracking-tight">{title}</h1>
-              {price != null && <p className="mt-3 text-2xl font-bold text-primary">Rp {Number(price).toLocaleString("id-ID")}</p>}
+              {price != null && <p className="mt-3 text-2xl font-bold text-primary">${Number(price).toLocaleString("en-US")}</p>}
             </div>
             <div className="rounded-3xl p-6 flex flex-col justify-between" style={{ background: ctaBg, color: ctaFg }}>
-              <p className="text-sm opacity-90">Tertarik dengan produk ini?</p>
+              <p className="text-sm opacity-90">Interested in this product?</p>
               {d.cta_label && (
                 <a href={ctaUrl} target={d.cta_new_tab ? "_blank" : undefined} rel={d.cta_new_tab ? "noopener noreferrer" : undefined}
                    className="mt-4 inline-flex items-center justify-center gap-2 rounded-sm bg-white/15 backdrop-blur px-4 py-3 font-semibold hover:bg-white/25 transition">
@@ -466,13 +466,13 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
             </div>
             {desc && (
               <div className="md:col-span-2 rounded-3xl border border-border bg-card p-6">
-                <h3 className="font-semibold mb-2">Deskripsi</h3>
+                <h3 className="font-semibold mb-2">Description</h3>
                 <div className="text-sm text-muted-foreground leading-relaxed prose prose-slate dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: desc }} />
               </div>
             )}
             {highlights.length > 0 && (
               <div className="rounded-3xl border border-border bg-card p-6">
-                <h3 className="font-semibold mb-3">Keunggulan</h3>
+                <h3 className="font-semibold mb-3">Highlights</h3>
                 <ul className="space-y-2 text-sm">
                   {highlights.map((h: string, i: number) => (
                     <li key={i} className="flex items-start gap-2"><Sparkles className="h-4 w-4 text-primary mt-0.5" /> {h}</li>
@@ -491,7 +491,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       const excerpt = item?.excerpt;
       const content = item?.content ?? item?.description ?? "";
       const backUrl = d.back_url ?? "/blog";
-      const backLabel = d.back_label ?? "Kembali ke blog";
+      const backLabel = d.back_label ?? "Back to blog";
       return (
         <article className="container mx-auto px-4 py-10 max-w-3xl">
           <a href={backUrl} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
@@ -501,10 +501,10 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
           <h1 className="mt-8 text-4xl md:text-5xl font-bold tracking-tight">{title}</h1>
           {(date || item?.profiles?.email) && (
             <p className="mt-3 text-sm text-muted-foreground flex flex-wrap gap-2 items-center">
-              {date && <span>{new Date(date).toLocaleDateString("id-ID", { dateStyle: "long" })}</span>}
+              {date && <span>{new Date(date).toLocaleDateString("en-US", { dateStyle: "long" })}</span>}
               {date && item?.profiles?.email && <span className="opacity-55">•</span>}
               {item?.profiles?.email && (
-                <span>Oleh: <span className="font-medium text-foreground">{item.profiles.email}</span></span>
+                <span>By: <span className="font-medium text-foreground">{item.profiles.email}</span></span>
               )}
             </p>
           )}
@@ -520,7 +520,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       const excerpt = item?.excerpt;
       const content = item?.content ?? item?.description ?? "";
       const backUrl = d.back_url ?? "/blog";
-      const backLabel = d.back_label ?? "Kembali";
+      const backLabel = d.back_label ?? "Back";
       const overlay = Number(d.overlay_opacity ?? 60) / 100;
       return (
         <>
@@ -534,8 +534,8 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
               <div className="max-w-3xl">
                 {(date || item?.profiles?.email) && (
                   <div className="flex flex-wrap gap-2 items-center text-xs font-medium text-white/95">
-                    {date && <span className="rounded-full bg-white/10 backdrop-blur px-3 py-1">{new Date(date).toLocaleDateString("id-ID", { dateStyle: "long" })}</span>}
-                    {item?.profiles?.email && <span className="rounded-full bg-white/10 backdrop-blur px-3 py-1">Oleh: {item.profiles.email}</span>}
+                    {date && <span className="rounded-full bg-white/10 backdrop-blur px-3 py-1">{new Date(date).toLocaleDateString("en-US", { dateStyle: "long" })}</span>}
+                    {item?.profiles?.email && <span className="rounded-full bg-white/10 backdrop-blur px-3 py-1">By: {item.profiles.email}</span>}
                   </div>
                 )}
                 <h1 className="mt-4 text-4xl md:text-6xl font-bold tracking-tight leading-tight">{title}</h1>
@@ -558,7 +558,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       const excerpt = item?.excerpt;
       const content = item?.content ?? item?.description ?? "";
       const backUrl = d.back_url ?? "/blog";
-      const backLabel = d.back_label ?? "Kembali ke blog";
+      const backLabel = d.back_label ?? "Back to blog";
       return (
         <section className="container mx-auto px-4 py-10">
           <a href={backUrl} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground mb-6">
@@ -575,10 +575,10 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
               )}
               {(date || item?.profiles?.email) && (
                 <p className="mt-4 text-sm text-muted-foreground flex flex-wrap gap-2 items-center">
-                  {date && <span>{new Date(date).toLocaleDateString("id-ID", { dateStyle: "long" })}</span>}
+                  {date && <span>{new Date(date).toLocaleDateString("en-US", { dateStyle: "long" })}</span>}
                   {date && item?.profiles?.email && <span className="opacity-55">•</span>}
                   {item?.profiles?.email && (
-                    <span>Oleh: <span className="font-medium text-foreground">{item.profiles.email}</span></span>
+                    <span>By: <span className="font-medium text-foreground">{item.profiles.email}</span></span>
                   )}
                 </p>
               )}
@@ -598,7 +598,7 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
       const excerpt = item?.excerpt;
       const content = item?.content ?? item?.description ?? "";
       const backUrl = d.back_url ?? "/blog";
-      const backLabel = d.back_label ?? "Kembali";
+      const backLabel = d.back_label ?? "Back";
       return (
         <article className="container mx-auto px-4 py-16 max-w-2xl">
           <a href={backUrl} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
@@ -607,9 +607,9 @@ export function SectionRenderer({ section, item }: { section: SectionRow; item?:
           <div className="mt-12 text-center">
             {(date || item?.profiles?.email) && (
               <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground flex flex-wrap gap-2 items-center justify-center">
-                {date && <span>{new Date(date).toLocaleDateString("id-ID", { dateStyle: "long" })}</span>}
+                {date && <span>{new Date(date).toLocaleDateString("en-US", { dateStyle: "long" })}</span>}
                 {date && item?.profiles?.email && <span className="opacity-55">•</span>}
-                {item?.profiles?.email && <span>Oleh: {item.profiles.email}</span>}
+                {item?.profiles?.email && <span>By: {item.profiles.email}</span>}
               </p>
             )}
             <h1 className="mt-4 text-4xl md:text-6xl font-bold tracking-tight leading-tight">{title}</h1>
@@ -633,7 +633,7 @@ function FeaturedProducts({ title, limit }: { title: string; limit: number }) {
     <section className="container mx-auto px-4 py-12">
       <div className="flex items-end justify-between mb-6">
         <h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
-        <Link to="/products" className="text-sm font-medium text-primary hover:underline">Lihat semua →</Link>
+        <Link to="/products" className="text-sm font-medium text-primary hover:underline">View all →</Link>
       </div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((p) => (
@@ -646,7 +646,7 @@ function FeaturedProducts({ title, limit }: { title: string; limit: number }) {
             <div className="p-4">
               <h3 className="font-semibold">{p.name}</h3>
               <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{stripHtml(p.description || "")}</p>
-              {p.price && <p className="mt-2 font-bold text-primary">Rp {Number(p.price).toLocaleString("id-ID")}</p>}
+              {p.price && <p className="mt-2 font-bold text-primary">${Number(p.price).toLocaleString("en-US")}</p>}
             </div>
           </Link>
         ))}
@@ -663,7 +663,7 @@ function FeaturedBlog({ title, limit }: { title: string; limit: number }) {
     <section className="container mx-auto px-4 py-12">
       <div className="flex items-end justify-between mb-6">
         <h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
-        <Link to="/blog" className="text-sm font-medium text-primary hover:underline">Lihat semua →</Link>
+        <Link to="/blog" className="text-sm font-medium text-primary hover:underline">View all →</Link>
       </div>
       <div className="grid gap-6 md:grid-cols-3">
         {items.map((p) => (
@@ -688,7 +688,7 @@ function FeaturedGallery({ title, limit }: { title: string; limit: number }) {
     <section className="container mx-auto px-4 py-12">
       <div className="flex items-end justify-between mb-6">
         <h2 className="text-2xl md:text-3xl font-bold">{title}</h2>
-        <Link to="/gallery" className="text-sm font-medium text-primary hover:underline">Lihat semua →</Link>
+        <Link to="/gallery" className="text-sm font-medium text-primary hover:underline">View all →</Link>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((img) => (

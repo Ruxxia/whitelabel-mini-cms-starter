@@ -53,17 +53,17 @@ function AdminProducts() {
       ? await supabase.from("products").update(payload).eq("id", editing.id)
       : await supabase.from("products").insert(payload);
     if (res.error) return toast.error(res.error.message);
-    toast.success("Tersimpan");
+    toast.success("Saved");
     setEditing(null);
     qc.invalidateQueries({ queryKey: ["admin_products"] });
     qc.invalidateQueries({ queryKey: ["products"] });
   };
 
   const remove = async (id: string) => {
-    if (!(await confirm({ title: "Hapus produk?", description: "Tindakan ini tidak dapat dibatalkan.", destructive: true, confirmText: "Hapus" }))) return;
+    if (!(await confirm({ title: "Delete product?", description: "This action cannot be undone.", destructive: true, confirmText: "Delete" }))) return;
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) return toast.error(error.message);
-    toast.success("Dihapus");
+    toast.success("Deleted");
     qc.invalidateQueries({ queryKey: ["admin_products"] });
     qc.invalidateQueries({ queryKey: ["products"] });
   };
@@ -71,24 +71,24 @@ function AdminProducts() {
   return (
     <AdminLayout>
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold">Produk</h1>
+        <h1 className="text-3xl font-bold">Products</h1>
         <div className="flex items-center gap-2">
           <Link to="/admin/pages/$slug" params={{ slug: "product_detail" }} className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-2 text-sm hover:bg-muted">
-            <LayoutTemplate className="h-4 w-4" /> Atur Halaman Detail
+            <LayoutTemplate className="h-4 w-4" /> Manage Detail Page
           </Link>
           <button onClick={() => setEditing({ ...empty })} className="inline-flex items-center gap-1 rounded-md bg-primary text-primary-foreground px-3 py-2 text-sm">
-            <Plus className="h-4 w-4" /> Tambah
+            <Plus className="h-4 w-4" /> Add
           </button>
         </div>
       </div>
-      <p className="text-sm text-muted-foreground mt-1">Halaman detail produk diakses otomatis di <code>/products/&lt;slug&gt;</code>. Gunakan "Atur Halaman Detail" untuk menyusun blok yang menampilkan data produk secara dinamis.</p>
+      <p className="text-sm text-muted-foreground mt-1">The product detail page is automatically accessed at <code>/products/&lt;slug&gt;</code>. Use "Manage Detail Page" to arrange blocks that display product data dynamically.</p>
 
       <div className="mt-6 rounded-2xl border border-border bg-card overflow-hidden">
         <table className="w-full text-sm">
           <thead className="bg-muted/50 text-left">
             <tr>
-              <th className="p-3">Nama</th>
-              <th className="p-3">Harga</th>
+              <th className="p-3">Name</th>
+              <th className="p-3">Price</th>
               <th className="p-3">Status</th>
               <th className="p-3"></th>
             </tr>
@@ -97,8 +97,8 @@ function AdminProducts() {
             {data?.map((p) => (
               <tr key={p.id} className="border-t border-border">
                 <td className="p-3 font-medium">{p.name}</td>
-                <td className="p-3">{p.price ? `Rp ${Number(p.price).toLocaleString("id-ID")}` : "-"}</td>
-                <td className="p-3">{p.is_published ? "Publik" : "Draft"}</td>
+                <td className="p-3">{p.price ? `$${Number(p.price).toLocaleString("en-US")}` : "-"}</td>
+                <td className="p-3">{p.is_published ? "Public" : "Draft"}</td>
                 <td className="p-3 text-right space-x-1">
                   <button onClick={() => setEditing({ id: p.id, name: p.name, slug: p.slug, description: p.description ?? "", price: p.price?.toString() ?? "", image_url: p.image_url ?? "", gallery: Array.isArray(p.gallery) ? (p.gallery as string[]) : [], is_published: p.is_published })} className="p-2 hover:bg-muted rounded-md"><Pencil className="h-4 w-4" /></button>
                   <button onClick={() => remove(p.id)} className="p-2 hover:bg-muted rounded-md text-destructive"><Trash2 className="h-4 w-4" /></button>
@@ -113,19 +113,19 @@ function AdminProducts() {
         <div className="fixed inset-0 z-50 bg-black/50 grid place-items-center p-4" onClick={() => setEditing(null)}>
           <div className="w-full max-w-lg rounded-2xl bg-card p-6 space-y-3" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold">{editing.id ? "Edit" : "Tambah"} Produk</h2>
+              <h2 className="text-xl font-bold">{editing.id ? "Edit" : "Add"} Product</h2>
               <button onClick={() => setEditing(null)}><X className="h-5 w-5" /></button>
             </div>
-            <Field label="Nama"><input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="input" /></Field>
-            <Field label="Slug"><input value={editing.slug} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} placeholder="otomatis dari nama" className="input" /></Field>
-            <Field label="Deskripsi">
+            <Field label="Name"><input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} className="input" /></Field>
+            <Field label="Slug"><input value={editing.slug} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} placeholder="automatic from name" className="input" /></Field>
+            <Field label="Description">
               <RichTextEditor
                 value={editing.description}
                 onChange={(html) => setEditing({ ...editing, description: html })}
               />
             </Field>
-            <Field label="Harga (IDR)"><input type="number" value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} className="input" /></Field>
-            <Field label="Gambar Produk (Maks 5)">
+            <Field label="Price"><input type="number" value={editing.price} onChange={(e) => setEditing({ ...editing, price: e.target.value })} className="input" /></Field>
+            <Field label="Product Images (Max 5)">
               <MultiImageUpload
                 bucket="products"
                 values={[editing.image_url, ...(editing.gallery || [])].filter(Boolean)}
@@ -138,9 +138,9 @@ function AdminProducts() {
             </Field>
             <label className="flex items-center gap-2 text-sm">
               <input type="checkbox" checked={editing.is_published} onChange={(e) => setEditing({ ...editing, is_published: e.target.checked })} />
-              Publikasikan
+              Publish
             </label>
-            <button onClick={save} className="w-full rounded-md bg-primary text-primary-foreground py-2 font-medium">Simpan</button>
+            <button onClick={save} className="w-full rounded-md bg-primary text-primary-foreground py-2 font-medium">Save</button>
           </div>
         </div>
       )}

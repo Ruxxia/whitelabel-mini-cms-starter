@@ -6,19 +6,19 @@ import { Palette, Globe, ShoppingBag, MessageSquare } from "lucide-react";
 export const Route = createFileRoute("/services")({ component: Services });
 
 const services = [
-  { icon: Palette, title: "Branding & Tema", desc: "Atur warna, logo, dan tipografi sesuai identitas." },
-  { icon: Globe, title: "Website Multi-halaman", desc: "Beranda, About, Layanan, Blog, dll lengkap." },
-  { icon: ShoppingBag, title: "Katalog Produk", desc: "Tampilkan produk dengan kategori & galeri." },
-  { icon: MessageSquare, title: "Manajemen Konten", desc: "Edit konten dari dashboard, real-time." },
+  { icon: Palette, title: "Branding & Themes", desc: "Customize colors, logos, and typography to fit your identity." },
+  { icon: Globe, title: "Multi-page Website", desc: "Complete Home, About, Services, Blog, etc." },
+  { icon: ShoppingBag, title: "Product Catalog", desc: "Display products with categories & galleries." },
+  { icon: MessageSquare, title: "Content Management", desc: "Edit content directly from the dashboard in real-time." },
 ];
 
 function Services() {
-  usePageSEO("services", { title: "Layanan Kami", description: "Layanan website builder white-label untuk UMKM." });
+  usePageSEO("services", { title: "Our Services", description: "White-label website builder services for local businesses." });
   return (
     <SiteLayout>
       <section className="container mx-auto px-4 py-16">
-        <h1 className="text-4xl font-bold tracking-tight text-center">Layanan Kami</h1>
-        <p className="mt-3 text-center text-muted-foreground">Solusi lengkap kehadiran digital UMKM.</p>
+        <h1 className="text-4xl font-bold tracking-tight text-center">Our Services</h1>
+        <p className="mt-3 text-center text-muted-foreground">A complete solution for your local business digital presence.</p>
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {services.map((s) => (
             <div

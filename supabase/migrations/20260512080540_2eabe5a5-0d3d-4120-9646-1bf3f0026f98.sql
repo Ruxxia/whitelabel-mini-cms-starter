@@ -277,38 +277,39 @@ with check (bucket_id in ('media','products','gallery','blog') and public.is_adm
 -- =========================================
 insert into public.settings (site_name, tagline, description, contact_email, contact_phone, contact_address, social)
 values (
-  'Toko UMKM Sejahtera',
-  'Produk lokal berkualitas untuk keluarga Indonesia',
-  'Kami menyediakan beragam produk UMKM pilihan dengan kualitas terbaik dan harga terjangkau.',
-  'halo@umkm.example',
-  '+62 812-3456-7890',
-  'Jl. Merdeka No. 123, Jakarta',
-  '{"instagram":"https://instagram.com/","whatsapp":"https://wa.me/6281234567890","facebook":"https://facebook.com/"}'::jsonb
+  'Local Artisan Store',
+  'Quality local products for every family',
+  'We provide a wide range of selected local products with the best quality and affordable prices.',
+  'hello@localshop.example',
+  '+1 (555) 123-4567',
+  '123 Liberty Street, Cityville',
+  '{"instagram":"https://instagram.com/","whatsapp":"https://wa.me/15551234567","facebook":"https://facebook.com/"}'::jsonb
 );
 
 insert into public.menus (location, label, url, sort_order) values
-  ('header','Beranda','/',1),
-  ('header','Tentang','/about',2),
-  ('header','Layanan','/services',3),
-  ('header','Produk','/products',4),
-  ('header','Galeri','/gallery',5),
+  ('header','Home','/',1),
+  ('header','About','/about',2),
+  ('header','Services','/services',3),
+  ('header','Products','/products',4),
+  ('header','Gallery','/gallery',5),
   ('header','Blog','/blog',6),
-  ('header','Kontak','/contact',7);
+  ('header','Contact','/contact',7);
 
 insert into public.categories (name, slug, description) values
-  ('Makanan','makanan','Aneka makanan khas'),
-  ('Kerajinan','kerajinan','Kerajinan tangan UMKM'),
-  ('Fashion','fashion','Pakaian dan aksesoris');
+  ('Food','food','Various local delicacies'),
+  ('Crafts','crafts','Handmade local crafts'),
+  ('Fashion','fashion','Clothing and accessories');
 
 insert into public.products (name, slug, description, price, image_url, sort_order) values
-  ('Keripik Singkong Premium','keripik-singkong','Renyah, gurih, dibuat dari singkong pilihan.', 25000, 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=800', 1),
-  ('Tas Anyaman Pandan','tas-anyaman','Tas anyaman handmade dari daun pandan.', 175000, 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=800', 2),
-  ('Batik Tulis Klasik','batik-tulis','Batik tulis motif klasik, premium quality.', 450000, 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800', 3);
+  ('Premium Cassava Chips','premium-cassava-chips','Crispy, savory, made from selected cassava.', 25000, 'https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=800', 1),
+  ('Pandan Woven Bag','woven-bag','Handmade woven bag made from pandan leaves.', 175000, 'https://images.unsplash.com/photo-1591561954557-26941169b49e?w=800', 2),
+  ('Classic Hand-Drawn Batik','hand-drawn-batik','Classic hand-drawn batik pattern, premium quality.', 450000, 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=800', 3);
 
 insert into public.blog_posts (title, slug, excerpt, content, cover_image, is_published, published_at, tags) values
-  ('Kisah UMKM Naik Kelas','kisah-umkm-naik-kelas','Bagaimana digitalisasi membantu UMKM tumbuh pesat.', 'Konten blog lengkap di sini...', 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200', true, now(), array['umkm','digital']);
+  ('How Local Businesses Go Digital','how-local-businesses-go-digital','How digitalization helps local businesses grow rapidly.', 'Full blog content goes here...', 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=1200', true, now(), array['local','digital']);
 
 insert into public.gallery_images (title, image_url, sort_order) values
-  ('Workshop UMKM','https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1200',1),
-  ('Produksi','https://images.unsplash.com/photo-1556745757-8d76bdb6984b?w=1200',2),
-  ('Pameran','https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1200',3);
+  ('Local Workshop','https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1200',1),
+  ('Production','https://images.unsplash.com/photo-1556745757-8d76bdb6984b?w=1200',2),
+  ('Exhibition','https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=1200',3);
+

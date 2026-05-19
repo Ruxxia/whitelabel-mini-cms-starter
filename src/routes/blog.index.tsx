@@ -9,7 +9,7 @@ export const Route = createFileRoute("/blog/")({ component: BlogList });
 function BlogList() {
   const { data: posts } = useBlogPosts();
   const { data: sections } = useSections("blog");
-  usePageSEO("blog", { title: "Blog", description: "Cerita, tips, dan inspirasi UMKM." });
+  usePageSEO("blog", { title: "Blog", description: "Stories, tips, and insights from our business." });
   return (
     <SiteLayout>
       <PageSections pageSlug="blog" />
@@ -34,7 +34,7 @@ function BlogList() {
                 </div>
                 {p.profiles?.email && (
                   <p className="mt-3 text-xs text-muted-foreground/80 flex items-center gap-1 border-t border-border/50 pt-2">
-                    <span>Oleh:</span>
+                    <span>By:</span>
                     <span className="font-medium text-foreground/90">{p.profiles.email}</span>
                   </p>
                 )}

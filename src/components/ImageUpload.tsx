@@ -20,9 +20,9 @@ export function ImageUpload({
     try {
       const url = await uploadImage(bucket, file);
       onChange(url);
-      toast.success("Gambar diunggah");
+      toast.success("Image uploaded successfully");
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Upload gagal";
+      const msg = err instanceof Error ? err.message : "Upload failed";
       toast.error(msg);
     } finally {
       setUploading(false);
@@ -40,7 +40,7 @@ export function ImageUpload({
       )}
       <label className="inline-flex items-center gap-2 cursor-pointer rounded-md border border-input bg-background px-3 py-2 text-sm hover:bg-muted">
         <Upload className="h-4 w-4" />
-        {uploading ? "Mengunggah..." : "Pilih gambar"}
+        {uploading ? "Uploading..." : "Select image"}
         <input type="file" accept="image/*" className="hidden" onChange={handle} disabled={uploading} />
       </label>
     </div>

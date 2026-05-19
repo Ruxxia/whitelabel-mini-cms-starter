@@ -12,8 +12,8 @@ export function SEOPreview({
   url?: string;
 }) {
   const { data: settings } = useSettings();
-  const finalTitle = title || (settings?.seo as any)?.og_title || settings?.site_name || "Judul Halaman";
-  const finalDesc = description || (settings?.seo as any)?.og_description || settings?.description || "Deskripsi halaman akan tampil di sini.";
+  const finalTitle = title || (settings?.seo as any)?.og_title || settings?.site_name || "Page Title";
+  const finalDesc = description || (settings?.seo as any)?.og_description || settings?.description || "Page description will appear here.";
   const finalImage = image || (settings?.seo as any)?.og_image || settings?.logo_url;
   const displayUrl = url || (typeof window !== "undefined" ? window.location.origin : "https://example.com");
   const host = (() => { try { return new URL(displayUrl).host; } catch { return displayUrl; } })();
@@ -37,7 +37,7 @@ export function SEOPreview({
               <img src={finalImage} alt="" className="h-full w-full object-cover" />
             </div>
           ) : (
-            <div className="aspect-[1.91/1] bg-muted grid place-items-center text-xs text-muted-foreground">Tidak ada gambar OG</div>
+            <div className="aspect-[1.91/1] bg-muted grid place-items-center text-xs text-muted-foreground">No OG image</div>
           )}
           <div className="p-3 bg-muted/40">
             <div className="text-[11px] uppercase text-muted-foreground truncate">{host}</div>

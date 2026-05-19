@@ -7,11 +7,11 @@ export const Route = createFileRoute("/gallery")({ component: Gallery });
 
 function Gallery() {
   const { data: images } = useGallery();
-  usePageSEO("gallery", { title: "Galeri", description: "Galeri foto kegiatan dan produk kami." });
+  usePageSEO("gallery", { title: "Gallery", description: "Photo gallery of our activities and products." });
   return (
     <SiteLayout>
       <section className="container mx-auto px-4 py-12">
-        <h1 className="text-4xl font-bold tracking-tight">Galeri</h1>
+        <h1 className="text-4xl font-bold tracking-tight">Gallery</h1>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {images?.map((img) => (
             <figure key={img.id} className="overflow-hidden rounded-2xl border border-border bg-card group">

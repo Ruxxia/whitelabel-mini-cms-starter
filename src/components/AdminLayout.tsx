@@ -6,12 +6,12 @@ import { useEffect } from "react";
 
 const items = [
   { to: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/admin/pages", label: "Halaman", icon: FileText },
-  { to: "/admin/products", label: "Produk", icon: ShoppingBag },
+  { to: "/admin/pages", label: "Pages", icon: FileText },
+  { to: "/admin/products", label: "Products", icon: ShoppingBag },
   { to: "/admin/blog", label: "Blog", icon: Newspaper },
-  { to: "/admin/gallery", label: "Galeri", icon: ImageIcon },
+  { to: "/admin/gallery", label: "Gallery", icon: ImageIcon },
   { to: "/admin/menus", label: "Menu", icon: MenuIcon },
-  { to: "/admin/settings", label: "Pengaturan", icon: Settings },
+  { to: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -24,9 +24,9 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     if (!loading && !user) navigate({ to: "/login" });
   }, [loading, user, navigate]);
 
-  if (loading || rolesLoading) return <div className="p-8">Memuat...</div>;
+  if (loading || rolesLoading) return <div className="p-8">Loading...</div>;
   if (!user) return null;
-  if (!isAdmin) return <div className="p-8">Anda tidak memiliki akses admin.</div>;
+  if (!isAdmin) return <div className="p-8">You do not have admin access.</div>;
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -37,7 +37,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen flex bg-muted/30">
       <aside className="hidden md:flex w-60 flex-col border-r border-border bg-card">
         <div className="p-4 border-b border-border">
-          <Link to="/" className="font-bold">← Kembali ke situs</Link>
+          <Link to="/" className="font-bold">← Back to site</Link>
         </div>
         <nav className="flex-1 p-2 space-y-1">
           {items.map((it) => {
@@ -51,7 +51,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           })}
         </nav>
         <button onClick={logout} className="m-2 flex items-center gap-2 rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">
-          <LogOut className="h-4 w-4" /> Keluar
+          <LogOut className="h-4 w-4" /> Logout
         </button>
       </aside>
       <main className="flex-1 p-6 md:p-8">{children}</main>

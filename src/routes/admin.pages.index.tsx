@@ -11,10 +11,10 @@ import { useConfirm } from "@/components/ConfirmDialog";
 export const Route = createFileRoute("/admin/pages/")({ component: AdminPages });
 
 const BUILTIN: Record<string, { label: string; desc: string; icon: any }> = {
-  home: { label: "Beranda", desc: "Halaman utama (hero, fitur, dll.)", icon: FileText },
-  products: { label: "Produk", desc: "Section di halaman katalog produk", icon: ShoppingBag },
-  blog: { label: "Blog", desc: "Section di halaman daftar artikel", icon: Newspaper },
-  gallery: { label: "Galeri", desc: "Section di halaman galeri", icon: ImageIcon },
+  home: { label: "Home", desc: "Main page (hero, features, etc.)", icon: FileText },
+  products: { label: "Products", desc: "Section on the product catalog page", icon: ShoppingBag },
+  blog: { label: "Blog", desc: "Section on the article list page", icon: Newspaper },
+  gallery: { label: "Gallery", desc: "Section on the gallery page", icon: ImageIcon },
 };
 
 function urlToSlug(url: string): string {
@@ -54,12 +54,12 @@ function AdminPages() {
   });
 
   const addMenu = async () => {
-    if (!newLabel.trim() || !newUrl.trim()) return toast.error("Isi label & url");
+    if (!newLabel.trim() || !newUrl.trim()) return toast.error("Fill in label & url");
     const url = newUrl.startsWith("/") ? newUrl : `/${newUrl}`;
     const next = (headerMenus?.length ?? 0) + 1;
     const { error } = await supabase.from("menus").insert({ label: newLabel, url, location: "header", sort_order: next });
     if (error) return toast.error(error.message);
-    toast.success("Halaman ditambahkan ke menu");
+    toast.success("Page added to menu");
     setNewLabel(""); setNewUrl("");
     qc.invalidateQueries({ queryKey: ["menus", "header"] });
     navigate({ to: "/admin/pages/$slug", params: { slug: urlToSlug(url) } });
@@ -68,12 +68,12 @@ function AdminPages() {
   const removePage = async (e: React.MouseEvent, id: string, slug: string, label: string) => {
     e.preventDefault();
     e.stopPropagation();
-    if (slug === "home") return toast.error("Halaman Beranda tidak dapat dihapus");
+    if (slug === "home") return toast.error("Home page cannot be deleted");
     const ok = await confirm({
-      title: `Hapus halaman "${label}"?`,
-      description: "Entri menu dan seluruh section pada halaman ini akan dihapus.",
+      title: `Delete page "${label}"?`,
+      description: "The menu entry and all sections on this page will be deleted.",
       destructive: true,
-      confirmText: "Hapus",
+      confirmText: "Delete",
     });
     if (!ok) return;
     if (id) {
@@ -81,7 +81,7 @@ function AdminPages() {
       if (mErr) return toast.error(mErr.message);
     }
     await supabase.from("sections").delete().eq("page_slug", slug);
-    toast.success("Halaman dihapus");
+    toast.success("Page deleted");
     qc.invalidateQueries({ queryKey: ["menus", "header"] });
     qc.invalidateQueries({ queryKey: ["menus", "footer"] });
     qc.invalidateQueries({ queryKey: ["admin_menus"] });
@@ -92,20 +92,20 @@ function AdminPages() {
     <AdminLayout>
       <div className="flex items-end justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-3xl font-bold">Halaman</h1>
-          <p className="text-muted-foreground mt-1">Daftar halaman mengikuti menu navigasi. Kelola section pada tiap halaman.</p>
+          <h1 className="text-3xl font-bold">Pages</h1>
+          <p className="text-muted-foreground mt-1">List of pages following the navigation menu. Manage sections on each page.</p>
         </div>
-        <Link to="/admin/menus" className="text-sm text-primary hover:underline">Kelola Menu →</Link>
+        <Link to="/admin/menus" className="text-sm text-primary hover:underline">Manage Menu →</Link>
       </div>
 
       <div className="mt-6 rounded-2xl border border-border bg-card p-4">
-        <p className="text-sm font-semibold mb-2 flex items-center gap-2"><Plus className="h-4 w-4" /> Tambah halaman baru</p>
+        <p className="text-sm font-semibold mb-2 flex items-center gap-2"><Plus className="h-4 w-4" /> Add new page</p>
         <div className="flex flex-wrap gap-2">
-          <input value={newLabel} onChange={(e) => setNewLabel(e.target.value)} placeholder="Label (mis. Layanan)" className="flex-1 min-w-[160px] rounded-md border border-input bg-background px-3 py-2 text-sm" />
-          <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="/url (mis. /layanan)" className="flex-1 min-w-[160px] rounded-md border border-input bg-background px-3 py-2 text-sm" />
-          <button onClick={addMenu} className="rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium">Tambah</button>
+          <input value={newLabel} onChange={(e) => setNewLabel(e.target.value)} placeholder="Label (e.g. Services)" className="flex-1 min-w-[160px] rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          <input value={newUrl} onChange={(e) => setNewUrl(e.target.value)} placeholder="/url (e.g. /services)" className="flex-1 min-w-[160px] rounded-md border border-input bg-background px-3 py-2 text-sm" />
+          <button onClick={addMenu} className="rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium">Add</button>
         </div>
-        <p className="text-xs text-muted-foreground mt-2">Halaman baru otomatis muncul di menu header dan dapat langsung diisi konten.</p>
+        <p className="text-xs text-muted-foreground mt-2">New pages automatically appear in the header menu and content can be added immediately.</p>
       </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -126,13 +126,13 @@ function AdminPages() {
                   <span className="inline-flex items-center gap-1 text-xs text-muted-foreground"><ExternalLink className="h-3 w-3" />{p.url}</span>
                 </div>
                 <h3 className="mt-3 font-semibold">{p.label}</h3>
-                <p className="text-sm text-muted-foreground mt-1">{b?.desc ?? "Atur section/konten halaman ini."}</p>
+                <p className="text-sm text-muted-foreground mt-1">{b?.desc ?? "Manage sections/content for this page."}</p>
               </Link>
               {canDelete && (
                 <button
                   onClick={(e) => removePage(e, p.id, p.slug, p.label)}
                   className="absolute bottom-3 right-3 p-2 rounded-md text-destructive hover:bg-destructive/10"
-                  aria-label="Hapus halaman"
+                  aria-label="Delete page"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>

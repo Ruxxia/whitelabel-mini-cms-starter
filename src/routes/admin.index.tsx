@@ -9,14 +9,14 @@ function AdminHome() {
   const { data: posts } = useBlogPosts();
   const { data: images } = useGallery();
   const stats = [
-    { label: "Produk", value: products?.length ?? 0, to: "/admin/products" },
-    { label: "Artikel", value: posts?.length ?? 0, to: "/admin/blog" },
-    { label: "Galeri", value: images?.length ?? 0, to: "/admin/gallery" },
+    { label: "Products", value: products?.length ?? 0, to: "/admin/products" },
+    { label: "Articles", value: posts?.length ?? 0, to: "/admin/blog" },
+    { label: "Gallery", value: images?.length ?? 0, to: "/admin/gallery" },
   ];
   return (
     <AdminLayout>
       <h1 className="text-3xl font-bold">Dashboard</h1>
-      <p className="text-muted-foreground mt-1">Kelola seluruh konten website Anda di sini.</p>
+      <p className="text-muted-foreground mt-1">Manage all your website content here.</p>
       <div className="mt-8 grid gap-4 sm:grid-cols-3">
         {stats.map((s) => (
           <Link key={s.label} to={s.to} className="rounded-2xl border border-border bg-card p-6 hover:-translate-y-0.5 transition-transform" style={{ boxShadow: "var(--shadow-card)" }}>

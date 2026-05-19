@@ -11,10 +11,10 @@ function BlogDetail() {
   const { slug } = Route.useParams();
   const { data: p, isLoading } = useBlogPost(slug);
   const { data: tplSections } = useSections("blog_detail");
-  useSEO({ title: p?.title ?? "Artikel", description: p?.excerpt ?? undefined, image: p?.cover_image ?? undefined });
+  useSEO({ title: p?.title ?? "Article", description: p?.excerpt ?? undefined, image: p?.cover_image ?? undefined });
 
-  if (isLoading) return <SiteLayout><div className="container mx-auto p-8">Memuat...</div></SiteLayout>;
-  if (!p) return <SiteLayout><div className="container mx-auto p-8">Artikel tidak ditemukan.</div></SiteLayout>;
+  if (isLoading) return <SiteLayout><div className="container mx-auto p-8">Loading...</div></SiteLayout>;
+  if (!p) return <SiteLayout><div className="container mx-auto p-8">Article not found.</div></SiteLayout>;
 
   const hasTemplate = (tplSections ?? []).filter((s: any) => s.type !== "seo").length > 0;
 
@@ -25,16 +25,16 @@ function BlogDetail() {
       ) : (
         <article className="container mx-auto px-4 py-10 max-w-3xl">
           <Link to="/blog" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4" /> Kembali ke blog
+            <ArrowLeft className="h-4 w-4" /> Back to blog
           </Link>
           {p.cover_image && <img src={p.cover_image} alt={p.title} className="mt-6 rounded-2xl w-full aspect-video object-cover" />}
           <h1 className="mt-6 text-4xl font-bold tracking-tight">{p.title}</h1>
           {(p.published_at || p.profiles?.email) && (
             <p className="mt-2 text-sm text-muted-foreground flex flex-wrap gap-2 items-center">
-              {p.published_at && <span>{new Date(p.published_at).toLocaleDateString("id-ID", { dateStyle: "long" })}</span>}
+              {p.published_at && <span>{new Date(p.published_at).toLocaleDateString("en-US", { dateStyle: "long" })}</span>}
               {p.published_at && p.profiles?.email && <span className="opacity-55">•</span>}
               {p.profiles?.email && (
-                <span>Oleh: <span className="font-medium text-foreground">{p.profiles.email}</span></span>
+                <span>By: <span className="font-medium text-foreground">{p.profiles.email}</span></span>
               )}
             </p>
           )}

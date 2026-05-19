@@ -36,9 +36,9 @@ function AdminMenus() {
 
   return (
     <AdminLayout>
-      <h1 className="text-3xl font-bold">Menu Navigasi</h1>
+      <h1 className="text-3xl font-bold">Navigation Menu</h1>
       <p className="text-muted-foreground mt-1 text-sm">
-        Atur urutan menu. Tambah/hapus halaman dilakukan di bagian <span className="font-medium">Halaman</span>.
+        Adjust the menu order. Adding/deleting pages is done in the <span className="font-medium">Pages</span> section.
       </p>
       <ul className="mt-6 rounded-2xl border border-border bg-card divide-y divide-border">
         {data?.map((m: any, i: number) => (
@@ -54,7 +54,7 @@ function AdminMenus() {
           </li>
         ))}
         {data && data.length === 0 && (
-          <li className="p-6 text-center text-sm text-muted-foreground">Belum ada menu. Tambahkan dari Halaman.</li>
+          <li className="p-6 text-center text-sm text-muted-foreground">No menus yet. Add them from Pages.</li>
         )}
       </ul>
     </AdminLayout>

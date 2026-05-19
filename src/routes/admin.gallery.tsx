@@ -24,27 +24,27 @@ function AdminGallery() {
     },
   });
   const add = async () => {
-    if (!imageUrl) return toast.error("Unggah gambar dulu");
+    if (!imageUrl) return toast.error("Please upload an image first");
     const { error } = await supabase.from("gallery_images").insert({ title, image_url: imageUrl });
     if (error) return toast.error(error.message);
     setTitle(""); setImageUrl("");
     qc.invalidateQueries({ queryKey: ["admin_gallery"] });
     qc.invalidateQueries({ queryKey: ["gallery"] });
-    toast.success("Ditambahkan");
+    toast.success("Added successfully");
   };
   const remove = async (id: string) => {
-    if (!(await confirm({ title: "Hapus gambar?", destructive: true, confirmText: "Hapus" }))) return;
+    if (!(await confirm({ title: "Delete image?", destructive: true, confirmText: "Delete" }))) return;
     await supabase.from("gallery_images").delete().eq("id", id);
     qc.invalidateQueries({ queryKey: ["admin_gallery"] });
     qc.invalidateQueries({ queryKey: ["gallery"] });
   };
   return (
     <AdminLayout>
-      <h1 className="text-3xl font-bold">Galeri</h1>
+      <h1 className="text-3xl font-bold">Gallery</h1>
       <div className="mt-6 rounded-2xl border border-border bg-card p-4 space-y-3">
-        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Judul (opsional)" className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title (optional)" className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
         <ImageUpload bucket="gallery" value={imageUrl} onChange={setImageUrl} />
-        <button onClick={add} className="rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium">Tambah ke galeri</button>
+        <button onClick={add} className="rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium">Add to Gallery</button>
       </div>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {data?.map((img) => (

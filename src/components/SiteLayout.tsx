@@ -88,7 +88,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
             <p className="text-sm text-muted-foreground">{settings?.tagline}</p>
           </div>
           <div>
-            <h4 className="font-semibold mb-3">Kontak</h4>
+            <h4 className="font-semibold mb-3">Contact</h4>
             <ul className="space-y-1 text-sm text-muted-foreground">
               {settings?.contact_email && <li>{settings.contact_email}</li>}
               {settings?.contact_phone && <li>{settings.contact_phone}</li>}
@@ -96,7 +96,7 @@ export function SiteLayout({ children }: { children: React.ReactNode }) {
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold mb-3">Navigasi</h4>
+            <h4 className="font-semibold mb-3">Navigation</h4>
             <ul className="space-y-1 text-sm">
               {menus?.slice(0, 5).map((m) => (
                 <li key={m.id}>

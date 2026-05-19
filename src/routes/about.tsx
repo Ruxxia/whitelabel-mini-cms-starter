@@ -7,17 +7,17 @@ export const Route = createFileRoute("/about")({ component: About });
 
 function About() {
   const { data: s } = useSettings();
-  usePageSEO("about", { title: `Tentang — ${s?.site_name ?? ""}`, description: s?.description ?? undefined });
+  usePageSEO("about", { title: `About — ${s?.site_name ?? ""}`, description: s?.description ?? undefined });
   return (
     <SiteLayout>
       <section className="container mx-auto px-4 py-16 max-w-3xl">
-        <h1 className="text-4xl font-bold tracking-tight">Tentang {s?.site_name}</h1>
+        <h1 className="text-4xl font-bold tracking-tight">About {s?.site_name}</h1>
         <p className="mt-4 text-lg text-muted-foreground">{s?.tagline}</p>
         <div className="prose prose-slate mt-8 max-w-none">
           <p>{s?.description}</p>
           <p>
-            Kami percaya UMKM Indonesia layak punya kehadiran digital yang profesional. Dengan
-            platform white-label ini, Anda bisa kelola seluruh konten website tanpa perlu coding.
+            We believe that local businesses deserve a professional digital presence. With this
+            white-label platform, you can manage all your website content without any coding required.
           </p>
         </div>
       </section>

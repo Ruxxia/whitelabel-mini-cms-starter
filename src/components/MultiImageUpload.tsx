@@ -27,9 +27,9 @@ export function MultiImageUpload({
       newValues[index] = url;
       // Filter out empty entries to keep the array packed
       onChange(newValues.filter(Boolean));
-      toast.success("Gambar berhasil diunggah");
+      toast.success("Image uploaded successfully");
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Upload gagal";
+      const msg = err instanceof Error ? err.message : "Upload failed";
       toast.error(msg);
     } finally {
       setUploadingIndex(null);
@@ -39,7 +39,7 @@ export function MultiImageUpload({
   const handleDelete = (index: number) => {
     const newValues = values.filter((_, i) => i !== index);
     onChange(newValues);
-    toast.success("Gambar dihapus dari galeri");
+    toast.success("Image deleted from gallery");
   };
 
   // Render a fixed set of slots up to `max`
@@ -58,13 +58,13 @@ export function MultiImageUpload({
                   type="button"
                   onClick={() => handleDelete(0)}
                   className="bg-destructive text-destructive-foreground p-2 rounded-full hover:scale-110 transition duration-150 shadow-lg"
-                  title="Hapus Gambar Utama"
+                  title="Delete Primary Image"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
               <div className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs font-semibold px-2.5 py-1 rounded-full shadow-md backdrop-blur">
-                Gambar Utama
+                Primary Image
               </div>
             </>
           ) : (
@@ -74,8 +74,8 @@ export function MultiImageUpload({
               ) : (
                 <>
                   <ImageIcon className="h-8 w-8 text-muted-foreground mb-2 group-hover:text-primary transition-colors" />
-                  <span className="text-sm font-semibold">Pilih Gambar Utama</span>
-                  <span className="text-xs text-muted-foreground mt-1">Cover produk (Wajib)</span>
+                  <span className="text-sm font-semibold">Select Primary Image</span>
+                  <span className="text-xs text-muted-foreground mt-1">Product cover (Required)</span>
                 </>
               )}
               <input
@@ -110,13 +110,13 @@ export function MultiImageUpload({
                         type="button"
                         onClick={() => handleDelete(index)}
                         className="bg-destructive text-destructive-foreground p-1.5 rounded-full hover:scale-110 transition duration-150 shadow"
-                        title={`Hapus Gambar ${index}`}
+                        title={`Delete Image ${index}`}
                       >
                         <X className="h-4 w-4" />
                       </button>
                     </div>
                     <div className="absolute bottom-2 left-2 bg-background/80 text-foreground text-[10px] px-1.5 py-0.5 rounded shadow backdrop-blur">
-                      Galeri {index}
+                      Gallery {index}
                     </div>
                   </>
                 ) : (
@@ -130,7 +130,7 @@ export function MultiImageUpload({
                     ) : (
                       <>
                         <Upload className="h-6 w-6 text-muted-foreground mb-1 group-hover:text-primary transition-colors" />
-                        <span className="text-xs font-medium">Unggah Galeri {index}</span>
+                        <span className="text-xs font-medium">Upload Gallery {index}</span>
                       </>
                     )}
                     <input
@@ -148,7 +148,7 @@ export function MultiImageUpload({
         </div>
       </div>
       <p className="text-[11px] text-muted-foreground italic">
-        * Anda dapat menambahkan hingga maksimal 5 gambar (1 gambar utama + 4 galeri). Silakan isi gambar utama terlebih dahulu untuk mengaktifkan slot galeri lainnya.
+        * You can add up to a maximum of 5 images (1 primary image + 4 gallery slots). Please fill the primary image first to activate other gallery slots.
       </p>
     </div>
   );

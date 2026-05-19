@@ -15,7 +15,7 @@ function AdminSettings() {
   const qc = useQueryClient();
   const [form, setForm] = useState<Record<string, any> | null>(null);
   useEffect(() => { if (s) setForm(s); }, [s]);
-  if (!form) return <AdminLayout>Memuat...</AdminLayout>;
+  if (!form) return <AdminLayout>Loading...</AdminLayout>;
   const theme: Record<string, string> = form.theme ?? {};
   const setT = (k: string, v: string) => setForm({ ...form, theme: { ...theme, [k]: v } });
   const seo: Record<string, any> = form.seo ?? {};
@@ -27,30 +27,30 @@ function AdminSettings() {
       contact_address: form.contact_address, theme: form.theme, seo: form.seo,
     }).eq("id", form.id);
     if (error) return toast.error(error.message);
-    toast.success("Pengaturan disimpan");
+    toast.success("Settings saved");
     qc.invalidateQueries({ queryKey: ["settings"] });
   };
   return (
     <AdminLayout>
-      <h1 className="text-3xl font-bold">Pengaturan Situs</h1>
+      <h1 className="text-3xl font-bold">Site Settings</h1>
       <div className="mt-6 grid gap-6 md:grid-cols-2">
         <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
-          <h2 className="font-semibold">Identitas</h2>
-          <Field label="Nama Situs"><input value={form.site_name ?? ""} onChange={(e) => setForm({ ...form, site_name: e.target.value })} className="inp" /></Field>
+          <h2 className="font-semibold">Identity</h2>
+          <Field label="Site Name"><input value={form.site_name ?? ""} onChange={(e) => setForm({ ...form, site_name: e.target.value })} className="inp" /></Field>
           <Field label="Tagline"><input value={form.tagline ?? ""} onChange={(e) => setForm({ ...form, tagline: e.target.value })} className="inp" /></Field>
-          <Field label="Deskripsi"><textarea value={form.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className="inp" /></Field>
+          <Field label="Description"><textarea value={form.description ?? ""} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={3} className="inp" /></Field>
           <Field label="Logo"><ImageUpload bucket="media" value={form.logo_url} onChange={(url) => setForm({ ...form, logo_url: url })} /></Field>
         </section>
         <section className="rounded-2xl border border-border bg-card p-5 space-y-3">
-          <h2 className="font-semibold">Kontak</h2>
+          <h2 className="font-semibold">Contact</h2>
           <Field label="Email"><input value={form.contact_email ?? ""} onChange={(e) => setForm({ ...form, contact_email: e.target.value })} className="inp" /></Field>
-          <Field label="Telepon"><input value={form.contact_phone ?? ""} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} className="inp" /></Field>
-          <Field label="Alamat"><textarea value={form.contact_address ?? ""} onChange={(e) => setForm({ ...form, contact_address: e.target.value })} rows={3} className="inp" /></Field>
+          <Field label="Phone"><input value={form.contact_phone ?? ""} onChange={(e) => setForm({ ...form, contact_phone: e.target.value })} className="inp" /></Field>
+          <Field label="Address"><textarea value={form.contact_address ?? ""} onChange={(e) => setForm({ ...form, contact_address: e.target.value })} rows={3} className="inp" /></Field>
         </section>
         <section className="rounded-2xl border border-border bg-card p-5 space-y-3 md:col-span-2">
-          <h2 className="font-semibold">Tema (Warna)</h2>
+          <h2 className="font-semibold">Theme (Colors)</h2>
           <div className="grid gap-3 sm:grid-cols-3">
-            {[["primary","Primary"],["primary_foreground","Primary text"],["accent","Accent"],["background","Background"],["foreground","Text"],["muted","Muted"]].map(([k,label]) => (
+            {[["primary", "Primary"], ["primary_foreground", "Primary text"], ["accent", "Accent"], ["background", "Background"], ["foreground", "Text"], ["muted", "Muted"]].map(([k, label]) => (
               <label key={k} className="block text-sm">
                 <span className="font-medium">{label}</span>
                 <div className="flex items-center gap-2 mt-1">
@@ -63,7 +63,7 @@ function AdminSettings() {
         </section>
         <section className="rounded-2xl border border-border bg-card p-5 space-y-3 md:col-span-2">
           <h2 className="font-semibold">SEO & Open Graph (Global)</h2>
-          <p className="text-xs text-muted-foreground">Digunakan sebagai fallback untuk halaman yang tidak memiliki SEO sendiri.</p>
+          <p className="text-xs text-muted-foreground">Used as a fallback for pages that don't have their own SEO settings.</p>
           <Field label="OG Title (default)"><input value={seo.og_title ?? ""} onChange={(e) => setSeo("og_title", e.target.value)} className="inp" /></Field>
           <Field label="OG Description (default)"><textarea value={seo.og_description ?? ""} onChange={(e) => setSeo("og_description", e.target.value)} rows={2} className="inp" /></Field>
           <Field label="OG Image (default)"><ImageUpload bucket="media" value={seo.og_image} onChange={(url) => setSeo("og_image", url)} /></Field>
@@ -76,19 +76,19 @@ function AdminSettings() {
               <h3 className="text-sm font-semibold">Robots.txt</h3>
               <label className="flex items-center gap-2 text-sm">
                 <input type="checkbox" checked={!!seo.disallow_all} onChange={(e) => setSeo("disallow_all", e.target.checked)} />
-                Blokir semua mesin pencari (Disallow: /)
+                Block all search engines (Disallow: /)
               </label>
-              <Field label="Baris tambahan robots.txt">
-                <textarea value={seo.robots_extra ?? ""} onChange={(e) => setSeo("robots_extra", e.target.value)} rows={4} placeholder="Contoh:&#10;User-agent: Googlebot&#10;Crawl-delay: 5" className="inp font-mono text-xs" />
+              <Field label="Additional robots.txt lines">
+                <textarea value={seo.robots_extra ?? ""} onChange={(e) => setSeo("robots_extra", e.target.value)} rows={4} placeholder="Example:&#10;User-agent: Googlebot&#10;Crawl-delay: 5" className="inp font-mono text-xs" />
               </Field>
               <p className="text-xs text-muted-foreground">
-                Sitemap otomatis: <a href="/api/sitemap.xml" target="_blank" rel="noreferrer" className="underline">/api/sitemap.xml</a> · Robots: <a href="/api/robots.txt" target="_blank" rel="noreferrer" className="underline">/api/robots.txt</a>
+                Automatic sitemap: <a href="/api/sitemap.xml" target="_blank" rel="noreferrer" className="underline">/api/sitemap.xml</a> · Robots: <a href="/api/robots.txt" target="_blank" rel="noreferrer" className="underline">/api/robots.txt</a>
               </p>
             </div>
           </div>
         </section>
       </div>
-      <button onClick={save} className="mt-6 rounded-md bg-primary text-primary-foreground px-5 py-2 font-medium">Simpan Pengaturan</button>
+      <button onClick={save} className="mt-6 rounded-md bg-primary text-primary-foreground px-5 py-2 font-medium">Save Settings</button>
       <style>{`.inp{width:100%;border:1px solid var(--input);background:var(--background);border-radius:0.375rem;padding:0.5rem 0.75rem;font-size:0.875rem}`}</style>
     </AdminLayout>
   );

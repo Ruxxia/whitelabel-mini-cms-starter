@@ -10,7 +10,7 @@ export const Route = createFileRoute("/products/")({ component: Products });
 function Products() {
   const { data: products, isLoading } = useProducts();
   const { data: sections } = useSections("products");
-  usePageSEO("products", { title: "Produk Kami", description: "Katalog produk UMKM unggulan." });
+  usePageSEO("products", { title: "Our Products", description: "Catalog of our premier local products." });
 
   return (
     <SiteLayout>
@@ -18,13 +18,13 @@ function Products() {
       <section className="container mx-auto px-4 py-12">
         {(!sections || sections.length === 0) && (
           <>
-            <h1 className="text-4xl font-bold tracking-tight">Produk</h1>
-            <p className="mt-2 text-muted-foreground">Pilihan produk terbaik untuk Anda.</p>
+            <h1 className="text-4xl font-bold tracking-tight">Products</h1>
+            <p className="mt-2 text-muted-foreground">The best product selections for you.</p>
           </>
         )}
 
         {isLoading ? (
-          <p className="mt-8 text-muted-foreground">Memuat...</p>
+          <p className="mt-8 text-muted-foreground">Loading...</p>
         ) : (
           <div className={`mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 ${(products?.length ?? 0) > 10 ? "max-h-[80vh] overflow-y-auto pr-2" : ""}`}>
             {products?.map((p) => (
@@ -45,7 +45,7 @@ function Products() {
                   <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{stripHtml(p.description || "")}</p>
                   {p.price && (
                     <p className="mt-2 font-bold text-primary">
-                      Rp {Number(p.price).toLocaleString("id-ID")}
+                      ${Number(p.price).toLocaleString("en-US")}
                     </p>
                   )}
                 </div>
